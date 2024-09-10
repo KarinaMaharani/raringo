@@ -31,16 +31,15 @@ Penjelasan :
 3. Buat template sesuai dengan kebutuhan situs pada main.html sesuai dengan kebutuhan, untuk variabel pastikan diformat dengan dua kurung kurawal seperti '{{NAMA VARIABEL}}'
 4. Dalam tugas ini, main.html diisi sebagai berikut :
 "
-<h1>Raringo</h1>
-<h2>Run your Erands!</h2>
+< h1>Raringo</ h1>
+< h2>Run your Erands!</ h2>
 
-<h5>Best Selling Product</h5>
-<p>{{name}}</p> 
-<p>Rp{{price}}</p> 
-<p>{{description}}</p> 
-<p>{{tags}}</p> 
-<p>{{ratings}}</p> 
-<p>{{sales}}</p> 
+< h5>Best Selling Product</ h5>
+< p>{{name}}</ p> 
+< p>Rp{{price}},00</ p> 
+< p>{{description}}</ p> 
+< p>{{tags}}</ p> 
+< p>Ratings {{ratings}}</ p> 
 "
 
 
@@ -103,17 +102,40 @@ def show_main(request):
 
 Membuat sebuah routing pada urls.py aplikasi main untuk memetakan fungsi yang telah dibuat pada views.py.
 
+Penjelasan :
+1. Saya membuat url dari aplikasi main terlebih daulu denan membuat file baru urls.py. File ini akkan diisi dengan data terkait aplikasi. Pastikan sudah mengimpor library path dan fungsi penghubun informasi dari file views.py di folder aplikasi yaitu main :
+"
+from django.urls import path
+from main.views import show_main
+"
+2. Berikut format yan saya gunakan untuk memanggil pembuatan path dan proses view yang menghubungkan models dan template (dibawah baris impor) :
+"
+app_name = 'main'
 
-7. Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet.
+urlpatterns = [
+    path('', show_main, name='show_main'),
+]
+"
+3. Selanjutnya kita akan menhubungkan url aplikasi denggan url project. Hal ini dapat kita lakukan dengan menambahkan baris impor di file urls.py pada folder proyek "from django.urls import path, include"
+4. Selanjutnya kita tambahkan anggota pada list urlpatterns path untuk urls.py di main dengan baris berikut "urlpatterns = [... path('', include('main.urls')), ...]"
+5. Kita bisa mengecek apabila situs kita sudah terkoneksi dengan menjalankan server dan mengecek
 
+Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet.
+
+Penjelasan :
+1. Buka situs webhosting, seperti https://pbp.cs.ui.ac.id. Log In dengan akun SSO
+2. Buat proyek baru dengan nama proyek yan diinginkan
+3. Setelah proyek berhasil dibuat, tambahkan url pws sebagai item baru pada list ALLOWED_HOSTS pada file settings.py di folder proyek. Gunakkan format yang tersedia. Dalam proyek ini maka url pws adalah  karina-maharani31-raringo.pbp.cs.ui.ac.id
+4. Buka cmd prompt dan run project command, isi window yan muncul dengan project credentials, lalu kembalikan  branch utama dari master ke branch utama seblumnya dalam proyek ini berarti branch main.
+5. Tunggu Build selesai, lalu buka url di browser pastikan url dimulai dengan http://.
+6. Untuk melakukan push kedepannya bisa gunakkan add commit push repositori biasa dilanjutkan dengan "git push pws main:master" untuk mengupdate url.
 
 ################
 
 Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
 
 Jawaban:
-
-[LANJUTIN] 
+https://drive.google.com/drive/folders/1bOZaPyMi8Zt2G7YVACV2iO3d93Vlzww2?usp=sharing 
 
 ################
 
@@ -134,8 +156,6 @@ Hal ini dikarenakan library Django di Python sangat flexible dibandingkan framew
 Dari sisi fitur Django juga sangat mudah digunakan karena memiliki dokumentasi dan community support yang baik ditambah dengan fleksibilitas pengunaan library python yang tidak memerlukan instalisasi/inisiasi kompleks.Sistem Django juga tidak berbayar, sehinga memudahkan developer pemula untuk bereksperimen. 
 
 Jika kita ambil melalui lensa mata kuliah di Fakultas Ilmu Komputer Universitas Indonesia, Django menjadi pilihan tepat karena menggunakan bahasa yang sebelumnya sudah dipelajari dalam mata kuliah wajib fakultas Dasar-Dasar Pemrograman I yaitu Python.
-
-[LANJUTIN] 
 
 ################
 
