@@ -151,7 +151,7 @@ Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan 
 
 Jawaban:
 
-Hal ini dikarenakan library Django di Python sangat flexible dibandingkan framework lainnya. Dari sisi popularitas, Django sangat relevan karena bahasa Python pada saat ini merupakan bahasa pemrograman yang paling popular. Selain itu bahasa Python jugga bahasa yang cepat untuk diprosees dibandingkan bahasa lain seperti Java yangg cenderung lebih lambat.
+Hal ini dikarenakan library Django di Python sangat flexible dibandingkan framework lainnya. Dari sisi popularitas, Django sangat relevan karena bahasa Python pada saat ini merupakan bahasa pemrograman yang paling popular. Selain itu bahasa Python jugga bahasa yang cepat untuk diproses dibandingkan bahasa lain seperti Java yangg cenderung lebih lambat.
 
 Dari sisi fitur Django juga sangat mudah digunakan karena memiliki dokumentasi dan community support yang baik ditambah dengan fleksibilitas pengunaan library python yang tidak memerlukan instalisasi/inisiasi kompleks.Sistem Django juga tidak berbayar, sehinga memudahkan developer pemula untuk bereksperimen. 
 
@@ -163,7 +163,9 @@ Mengapa model pada Django disebut sebagai ORM?
 
 Jawaban:
 
-[LANJUTIN] 
+model pada Djano termasuk ORM atau Object-Relational Mapping karena model dapat menghubungkan aplikasi Django dengan database relational yang digunakan oleh developer (MySQL, PorteSQL, dsb.) Hal ini memudahkan developer dalam menggunakan/mengubah/mengakses database tanpa menggunakan query database melalui penggunaan objek nativee dalam python.
+
+Hal ini didukung oleh mekanisme ORM Django yang meliputi abstraksi database, non query database manipulation/creation, migrasi yang terinterasi serta mapping objek ke database. Abstraksi database (serupa mekanisme konsep diagram ERD) memvisualisasi data namun tetap agnostic terhadap platform database dan bahasa pemrograman Django. Non query database manipulation/creation berkaitan dengan implisit translation dari Django sehingga developer dapat melakukan CRUD Create Read Update Delete dengan sintaks python yang lebih ringkas. Migrasi pada Django sudah dibuat secara native ke Django karena kita hanya perlu memanggil file manage.py makemigrations atau managge.py migrate yang diinisiasi saat membuat proyek Django. Mapping objek ke database mengaitkan konsep atribut model pada Django dengan kolom/baris tabel database.   
 
 
 
