@@ -31,7 +31,10 @@ Penjelasan :
 3. Buat template sesuai dengan kebutuhan situs pada main.html sesuai dengan kebutuhan, untuk variabel pastikan diformat dengan dua kurung kurawal seperti '{{NAMA VARIABEL}}'
 4. Dalam tugas ini, main.html diisi sebagai berikut :
 "
-< h1>Raringo</ h1>
+< p>{{name}}</ p> 
+< p>{{class}}</ p> 
+
+< h1>{{application}}</ h1>
 < h2>Run your Erands!</ h2>
 
 < h5>Best Selling Product</ h5>
@@ -54,7 +57,7 @@ Penjelasan :
 2. Model kita definisikan dengan membuat kelas yang memiliki superclass models.Model yang berarti kita akan menggunakan Model dari library models.
 3. Dalam class ini kita membuat variabel name, price, description, dan variabl lainnya serta tipe field sebagai berikut :
 "
-class MoodEntry(models.Model):
+class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
     description = models.TextField()
@@ -88,7 +91,11 @@ Dalam situs saya format ini disesuaikan sebagai berikut :
 "
 def show_main(request):
     context = {
-        'name' : 'Eyeshadow Parastyles X Gone',
+        'name' : 'Karina Maharani',
+        'class' : 'PBP A',
+        'application' : 'Raringo',
+
+        'product' : 'Eyeshadow Parastyles X Gone',
         'price': 75000,
         'description': 'Trio Best Selling Shades in our combined customer base',
         'tags': 'BEAUTY, LIFESTYLE',
