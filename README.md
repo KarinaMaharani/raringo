@@ -509,9 +509,11 @@ Melakukan add-commit-push ke GitHub.
 
 Jawaban :
 
-
+XML
 ![Screenshot 2024-09-18 003134](https://github.com/user-attachments/assets/8daa20c8-1bcd-446a-9fc5-a89757a7ca9c)
 ![Screenshot 2024-09-18 003206](https://github.com/user-attachments/assets/cee69a6f-e2fc-4a87-9e2e-9e9c67bf69ed)
+
+JSON
 ![Screenshot 2024-09-18 003146](https://github.com/user-attachments/assets/702c7959-7a67-4055-8b2d-60c7fe96a88e)
 ![Screenshot 2024-09-18 003246](https://github.com/user-attachments/assets/3c10fd69-23c1-4cfa-887f-d97807d8f590)
 
