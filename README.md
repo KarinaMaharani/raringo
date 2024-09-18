@@ -220,7 +220,7 @@ Hal ini didukung oleh mekanisme ORM Django yang meliputi abstraksi database, non
 
 ################
 
-##TUGAS 3
+##TUGAS 3 - Karina Maharani 2306165736 PBP A
 
 ################
 
