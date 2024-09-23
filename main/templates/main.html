@@ -6,13 +6,6 @@
 <h1>{{application}}</h1>
 <h2>Run your Erands!</h2>
 
-<!-- <h3>Best Selling Product</h3>
-<p>{{product}}</p> 
-<p>Rp{{price}},00</p> 
-<p>{{description}}</p> 
-<p>{{tags}}</p> 
-<p>Ratings {{ratings}}</p>  -->
-
 {% if not product_entries %}
 <p>Belum ada data produk.</p>
 {% else %}
@@ -44,4 +37,12 @@
 <a href="{% url 'main:create_product_entry' %}">
   <button>Add New Product</button>
 </a>
+
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+<br />
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+
 {% endblock content %}
