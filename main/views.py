@@ -26,9 +26,7 @@ def show_main(request):
     return render(request, "main.html", context)
 
 def create_product_entry(request):
-    context = {
-        'application': 'Raringo',
-    }
+
     form = ProductEntryForm(request.POST or None)
     
     if form.is_valid() and request.method == "POST":
@@ -37,7 +35,10 @@ def create_product_entry(request):
         product_entry.save()
         return redirect('main:show_main')
 
-    context = {'form': form}
+    context = {
+        'application': 'Raringo',
+        'form': form
+    }
     return render(request, "create_product_entry.html", context)
 
 def show_xml(request):
