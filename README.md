@@ -521,6 +521,44 @@ JSON
 
 ##TUGAS 4 - Karina Maharani 2306165736 PBP A
 
+Apa perbedaan antara HttpResponseRedirect() dan redirect()
+
+Jawab :
+HttpResponseRedirect() dan redirect() digunakan untuk melakukan redirect ke page lain, akan tetapi penggunaan HttpResponseRedirect dan redirect berbeda. HttpResponseRedirect memberikan kustomisasi yang lebih luas dibandingkan redirect karena redirect dibatasi dengan parameternya yaitu link url atau url pattern atau model yang didefiniskan oleh django. Hal ini dikarenakan HttpResponseRedirect() berasal dari kelas tersendiri sehingga HttpResponseRedirect() bisa memberikan opsi lebih banyak seperti url absolut atau url eksternal dan kode 302, yang berarti "Redirect Sementara" ke url baru yang ditentukan jika url utama bermasalah.
+
+
+Jelaskan cara kerja penghubungan model Product dengan User!
+
+Jawab :
+Model Product dihubungkan dengan Model User melalui penggunaan Foreign Key pada model tabel relasional database. Hubungan model foreign key bekerja dengan membuat kolom baru pada tabel Product (yang berpartisipasi secara total) pada model ER/EER yang berisikan data yang diperoleh dari primary key entity relationalnya yaitu User.    
+
+
+Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+
+Jawab :
+Authentication merujuk pada proses verifikasi pengguna yang melakukan login dengan pengecekan apabila username dan password terdaftar. Jika terdaftar user diterima sebagai user dan bukan guest serta bisa mengakses situs/aplikasi. Authentication tidak hanya sebatas mengisi username dan password tapi berupa two-authentication dimana kita melakukan autentifikasi dengan gawai lain (mengisi kode otp). 
+
+Authorization merujuk pada verfikasi perizinan akses fitur untuk user berdasarkan status/role user. Misalkan mahasiswa akan memiliki akses untuk melakukan unggah tugas sedangkan dosen memiliki fitur untuk merilis kuis dn tugas.
+
+Dalam kasus Django Authentication dan Authorization, Client side akan merequest server untuk melakukan pengecekan apabila credentials yang dikirimkan valid dan memiliki perizinan yang diingikan jika ya maka credentials tersebut akan diproses sebagai identifikasi sebuah session. Session ini akan memberikan Http yang bersifat stateless untuk tetap memberikan informasi yang benar ke user sekalipun banyak request data yang dilakukan, session dengan credentials ini akan menjadi identifikasi terkait response apa yang diberikan.
+
+
+Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+
+Jawab :
+
+Django dapat mengingat sesi login dengan cookies, cookie yang digunakan dibagi menjadi dua yaitu session cookie (temporary) dimana cookie disimpan di browser shingga saat user menutup tab dan membuka kembali tab url yang sama di isntance browser yang sama user tetap terhubung hingga instance browser tersebut dihapus. Adapula persistent cookie yaitu cookie yang disimpan di browser computer sehingga saat instance browser ditutup informasi cookie tetap disimpan. Django sendiri menggunakan keduanya untuk menjalankan situs, temporary cookies akan dihapus setelah user menutup web, kecuali jika pengguna memilih untuk tetap login. Sedangkan persistent cookie Django digunakan untuk menyimpan data sesi di server (biasanya dalam database, tetapi juga bisa di cache atau file) sehingga saat user melakukan log in informasi di instance web/sesi sebelumnya tetap tersimpan.
+
+Selain sistem log in, cookie bisa digunakan untuk menyimpan preferences user, rekomendasi untuk user, dan lain-lainnya. Perlu diketahui bahwa walaupun cookie tidak secara langsung menyimpan informasi pribadi melainkan program data, tidak semua cookie aman. Terutama persistent cookie dari third party cookies yang di manage oleh pihak server jika server atau situs tidak dibuat in-house.
+
+
+
+Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+Jawab :
+
+##CONTINUE
+
 ################
 
 
