@@ -524,7 +524,9 @@ JSON
 Apa perbedaan antara HttpResponseRedirect() dan redirect()
 
 Jawab :
-HttpResponseRedirect() dan redirect() digunakan untuk melakukan redirect ke page lain, akan tetapi penggunaan HttpResponseRedirect dan redirect berbeda. HttpResponseRedirect memberikan kustomisasi yang lebih luas dibandingkan redirect karena redirect dibatasi dengan parameternya yaitu link url atau url pattern atau model yang didefiniskan oleh django. Hal ini dikarenakan HttpResponseRedirect() berasal dari kelas tersendiri sehingga HttpResponseRedirect() bisa memberikan opsi lebih banyak seperti url absolut atau url eksternal dan kode 302, yang berarti "Redirect Sementara" ke url baru yang ditentukan jika url utama bermasalah.
+HttpResponseRedirect() dan redirect() digunakan untuk melakukan redirect ke page lain, akan tetapi penggunaan HttpResponseRedirect dan redirect berbeda. HttpResponseRedirect memberikan kustomisasi yang lebih luas dibandingkan redirect karena redirect dibatasi dengan parameternya yaitu link url atau url pattern atau model yang didefiniskan oleh django. 
+
+Hal ini dikarenakan HttpResponseRedirect() berasal dari kelas tersendiri sehingga HttpResponseRedirect() bisa memberikan opsi lebih banyak seperti url absolut atau url eksternal dan kode 302, yang berarti "Redirect Sementara" ke url baru yang ditentukan jika url utama bermasalah. Untuk membantu pencarian url berdasarkan pattern kita menggunakan bantuan reverse()
 
 
 Jelaskan cara kerja penghubungan model Product dengan User!
@@ -558,7 +560,7 @@ Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-b
 Jawab :
 1. Pertama kita akan membuat terlebih dahulu form baru untuk membuat sistem register, login, logout serta objeK user.
 Pada views.py di folder main tambahkan imporrt library untuk pembuatan user dan fungsi register serta login dengan sistem authentication sebagai berikut
-'''
+```
 #untuk register
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -602,10 +604,10 @@ def logout_user(request):
     logout(request)
     return redirect('main:login')
 
-'''
+```
 
-2. Kemudian untuk mmbuat tampilan pagge register dan login buatlah berkas html untuk tampilan login dan register dengan nama seperti login.html dan reggister.html pada folder template di folder main dengan conttoh isi seperti berikut :
-'''
+2. Kemudian untuk mmbuat tampilan pagge register dan login buatlah berkas html untuk tampilan login dan register dengan nama seperti login.html dan register.html pada folder template di folder main dengan conttoh isi seperti berikut :
+```
 ##untuk register.html
 {% extends 'base.html' %}
 
@@ -639,9 +641,9 @@ def logout_user(request):
 </div>
 
 {% endblock content %}
-'''
+```
 
-'''
+```
 ##untuk login.html
 {% extends 'base.html' %}
 
@@ -675,9 +677,9 @@ def logout_user(request):
 </div>
 
 {% endblock content %}
-'''
-untu logout kita dapat menambahkkan button di main page sehingga user bisa melakukan logout dari akun secara lnsgung
-'''
+```
+untuk logout kita dapat menambahkkan button di main page sehingga user bisa melakukan logout dari akun secara lnsgung
+```
 #main.html
 
 kode sebelumnya...
@@ -686,11 +688,11 @@ kode sebelumnya...
 </a>
 
 
-'''
+```
 
 
 4. tambahkan pula urls agar webpage register, login dan logout dapat diakses dengan menambahan fungsi register dan login pada urls.py di folder main
-'''
+```
 from main.views import register, login_user, logout_user
 
 urlpatterns = [
@@ -700,10 +702,10 @@ urlpatterns = [
   path('logout/', logout_user, name='logout'),
 ]
 
-'''
+```
 
 5. Selanjutnya kita akan memodifikasi bentuk sesi untuk merestrikk akses ke situs agar hanya user yang sudah login saja yang bisa mengakses dengan menambahan requirement pada views.py di folder main untuk login dan berikan property requirement sebelum fungsi yang menampilkan main agar program tidak sembarang masuk ke main tanpa login
-'''
+```
 
 from django.contrib.auth.decorators import login_required
 
@@ -715,18 +717,18 @@ def show_main(request):
 
 ...
 
-'''
+```
 
 6. Jika kita ingin menyimpan dan menampilkan login terakhir kita dapat menggunakan cookies sementara. Pertama kita bisa menggunakan import library untu menyimpan time dan juga memberikan response http pada view.py di main.html dengan
-'''
+```
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-'''
+```
 
 7. Ubah fungsi login pada views.py untuk merecord informasi login trakhir sebagai berikut
-'''
+```
 def login_user(request):
    if request.method == 'POST':
       form = AuthenticationForm(data=request.POST)
@@ -743,10 +745,10 @@ if form.is_valid():
    context = {'form': form}
    return render(request, 'login.html', context)
 
-'''
+```
 
 8. untuk menampilkan nilai last_login pada main kita dapat menambahkan variabel baru di context pada show_main di view.py sebagai berikut :
-'''
+```
 ...
 
   kode show_main sebelumnya ...
@@ -758,29 +760,29 @@ if form.is_valid():
 
 ...
 
-'''
+```
 
 9. Untuk keamanan dan saving space jangan lupa untuk menghapus cookies saat melakukan logout, lakukan modifikasi pada sistem logout di views.py sebagai berikut 
-'''
+```
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
-'''
+```
 
 10. Untuk membuat name pada situs sesuai dengan user yang masuk kita dapat membuat model baru dlaam bentuk user dengan import/menambahkan model pada models.py dan menambahkan parametere user pada model program sebaai berikut :
-'''
+```
   from django.contrib.auth.models import User
   ...
 
   class ProductEntry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
     ...
-'''
+```
 
 11. Tambahkan parameter user agar program dapat mendetect penambahan/permintaan request berdasarkan user tertentu dengan mengubah function yang melakukan request seperti pada views.py di folder main sebagai berikut 
-'''
+```
 def create_product_entry(request):
     form = ProductEntryForm(request.POST or None)
 
@@ -793,10 +795,10 @@ def create_product_entry(request):
     context = {'form': form}
     return render(request, "create_product_entry.html", context)
 
-'''
+```
 
 12. Modifikasi pula data pada context show_main pada views.py untuk mengambil username dari objek user yang logged in
-'''
+```
 def show_main(request):
     ...
 
@@ -805,17 +807,17 @@ def show_main(request):
          ...
     }
 ...
-'''
+```
 
 13. Untuk menyimpan model yang sudah diprebarui, lakukan migration pada terminal dengan kode
-'''
+```
 python manage.py makemigrations
 python manage.py migrate
-'''
+```
 Jika muncul error terkait default value pilih opsi 1 denggan nilai default asal seperti 1 untuk menyelesaikan error tersebut aar database tetap valid.
 
 13. Sebagai tembahan kita dapat mempersiapkan environment production dengan menambahkkan beberapa baris kode di settings.py di folder [nama project]
-'''
+```
 import os
 
 ...
@@ -825,7 +827,7 @@ DEBUG = not PRODUCTION
 
 ...
 
-'''
+```
 
 
 
