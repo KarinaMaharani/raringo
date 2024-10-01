@@ -829,7 +829,31 @@ DEBUG = not PRODUCTION
 
 ```
 
+################
 
+TUGAS 5
+Karina Maharani 22306165736
+
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+
+Prioritas didasarkan oleh hierarki. Secara garis besar terdapat 4 area hierarki sebagai berikut :
+ 1. Origin & Importance
+  Inline CSS > Internal CSS > External CSS (semakin kekanan semakin kurang prioritasnya dan akan dioverridee oleh yang disebelah kirinya) 
+
+ 2. Selector Specificity
+  id (#id_css_name)> class (.class_css_name) > tag (tag_name atau tidak ada tambahan) (semakin kekanan semakin kurang prioritasnya dan akan dioverridee oleh yang disebelah kirinya) 
+
+ 3. Order of Appearance
+  Berdasarkan order dari line of code. Kode awal akan dioverride line of code baru karena dibaca dari atas ke bawah dengan lin of code terupdate sebagai rujukan terakhir
+ 
+ 4. Initial & Inherited Properties (default values)
+ Komponen pada sebuah wadah/container akan meng-inherit CSS Styling dari containernnya. Misalkkan < p> yang ada didalam < div class="text-gray"> akan memiliki text color gray juga walaupun tidak disebut ekplisit pada tag < p>
+
+
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 
 
 ################
