@@ -1,0 +1,13 @@
+<div class="bg-indigo-900 w-full rounded-lg font-[sans-serif] overflow-hidden w-full mx-auto">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 items-center text-white">
+        <div class="lg:col-span-2 p-10">
+            <h1 class="text-3xl font-bold">Welcome, {{name}}</h1>
+            <p class="mt-4 text-sm leading-relaxed silkscreen-regular">with NPM {{npm}} from {{class}}</p>
+            <div class="flex mt-4">
+                <a href="{% url 'main:create_product_entry' %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  Add New Product
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

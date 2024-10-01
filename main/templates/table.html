@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Raringo</title>
+{% endblock meta %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4 py-4 mt-16 max-w-screen">
+    <div class="container-fluid">
+      {% if not product_entries %}
+      <p>Belum ada data produk.</p>
+      {% else %}
+      <table class="min-w-full bg-white rounded-lg border border-gray-200">
+        <thead class="bg-indigo-900 text-white">
+          <tr>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Product Name</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Price</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Description</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Tags</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Ratings</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300">Time Ordered</th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300"></th>
+            <th class="text-left py-3 px-4 font-semibold text-sm border-b border-gray-300"></th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          {% for product_entry in product_entries %}
+          <tr>
+            <td class="py-3 px-4 border-b border-gray-300">{{product_entry.name}}</td>
+            <td class="py-3 px-4 border-b border-gray-300">Rp{{product_entry.price}}</td>
+            <td class="py-3 px-4 border-b border-gray-300">{{product_entry.description}}</td>
+            <td class="py-3 px-4 border-b border-gray-300">{{product_entry.tags}}</td>
+            <td class="py-3 px-4 border-b border-gray-300">{{product_entry.ratings}} Stars</td>
+            <td class="py-3 px-4 border-b border-gray-300">{{product_entry.time}}</td>
+            <td class="text-blue-600 hover:underline border-b border-gray-300 py-3 px-4">
+              <a href="{% url 'main:edit_product' product_entry.pk %}">
+                  <button>
+                      Edit
+                  </button>
+              </a>
+            </td>
+            <td class="text-blue-600 hover:underline border-b border-gray-300 py-3 px-4">
+              <a href="{% url 'main:delete_product' product_entry.pk %}">
+                  <button>
+                      Delete
+                  </button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+
+    <div class="flex justify-end mt-4">
+      <a href="{% url 'main:create_product_entry' %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+        Add New Product
+      </a>
+    </div>
+
+    <div class="mt-4">      
+      <h5>Sesi terakhir login: {{ last_login }}</h5>
+      <br />
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,64 +1,39 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Raringo</title>
+{% endblock meta %}
 {% block content %}
+{% include 'navbar.html' %}
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{application}}</a>
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4 py-4 mt-16 max-w-screen">
+    <div class="container-fluid">
+      {% include "card_info.html" with name=name npm=npm class=class %}   
     </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="create-product-entry">Add Product</a></li>
-    </ul>
+    <br>
+    <div class="overflow-x-auto">
+      {% if not product_entries %}
+      <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+          <p class="text-center text-gray-600 mt-4">Belum ada produk terdaftar.</p>
+      </div>
+      {% else %}
+      <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+          {% for product_entry in product_entries %}
+              {% include 'card_product.html' with product_entry=product_entry %}
+          {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    
+
+    <div class="mt-4">      
+      <h5>Sesi terakhir login: {{ last_login }}</h5>
+      <br />
+    </div>
   </div>
-</nav>
-
-<div class="container-fluid"></div>
-  <p>Welcome, {{name}}</p> 
-  <p>From Class {{class}}</p>   
 </div>
-
-<div>
-{% if not product_entries %}
-<p>Belum ada data produk.</p>
-{% else %}
-<table class="table">
-    <tr>
-      <th>Product Name</th>
-      <th>Price</th>
-      <th>Description</th>
-      <th>Tags</th>
-      <th>Ratings</th>
-      <th>Time Ordered</th>
-    </tr>
-
-    {% for product_entry in product_entries %}
-    <tr>
-      <td>{{product_entry.name}}</td>
-      <td>Rp.{{product_entry.price}}</td>
-      <td>{{product_entry.description}}</td>
-      <td>{{product_entry.tags}}</td>
-      <td>{{product_entry.ratings}} Stars</td>
-      <td>{{product_entry.time}}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  {% endif %}
-  <br />
-</div>
-
-<div>
-  <a href="{% url 'main:create_product_entry' %}">
-    <button>Add New Product</button>
-  </a>
-  
-  
-  <h5>Sesi terakhir login: {{ last_login }}</h5>
-  <br />
-  <a href="{% url 'main:logout' %}">
-    <button>Logout</button>
-  </a>
-</div>
-
 
 {% endblock content %}

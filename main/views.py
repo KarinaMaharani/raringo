@@ -17,6 +17,7 @@ def show_main(request):
     product_entries = Product.objects.all()
     context = {
         'name' : request.user.username,
+        'npm' : '2306165736',
         'class' : 'PBP A',
         'application' : 'Raringo',
         'product_entries': product_entries,
@@ -24,6 +25,19 @@ def show_main(request):
     }
 
     return render(request, "main.html", context)
+
+def show_table(request):
+    product_entries = Product.objects.all()
+    context = {
+        'name' : request.user.username,
+        'npm' : '2306165736',
+        'class' : 'PBP A',
+        'application' : 'Raringo',
+        'product_entries': product_entries,
+        'last_login': request.COOKIES['last_login'],
+    }
+
+    return render(request, "table.html", context)
 
 def create_product_entry(request):
 
@@ -40,6 +54,23 @@ def create_product_entry(request):
         'form': form
     }
     return render(request, "create_product_entry.html", context)
+
+def edit_product(request, id):
+    product_from_id = Product.objects.get(pk = id)
+    product_form = ProductEntryForm(request.POST or None, instance=product_from_id)
+
+    if product_form.is_valid() and request.method == "POST":
+        product_form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': product_form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    product_from_id = Product.objects.get(pk = id)
+    product_from_id.delete()
+
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
     data = Product.objects.all()

@@ -11,7 +11,10 @@ class Product(models.Model):
     time = models.DateField(auto_now_add=True)
     tags = models.CharField(max_length=255)
     ratings = models.DecimalField(max_digits=2, decimal_places=1)
+    image_url = models.URLField(blank=True, null=True)
 
     @property
     def recommend_to_user(self):
         return self.ratings >= 3.7
+    
+
