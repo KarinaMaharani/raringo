@@ -851,10 +851,136 @@ Prioritas didasarkan oleh hierarki. Secara garis besar terdapat 4 area hierarki 
 
 
 2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
-3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
-4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
-5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+Responsive design dapat digunakan pada multiple platform secara dinamis, jika kita meng-hardcode website atau kode gitu, web akan rawann untuk sulit digunakan atau bahkan tidak bisa digunakan karena layout yang digunakan membatasi fitur yang bisa diakses oleh user. 
 
+Manfaat responsive design :
+1. Readibility
+2. Optimisasi Performa
+3. Membantu future development, web lebih mudah di modifikasi jika sekiranya perlu fitur baru atau ingin dibuat aksesibel di platform baru seperti mobile atau IoT.
+
+Contoh aplikasi yang sudah menerapkan responsive design adalah tokopedia yang bisa diakses via web dan mobile. Contoh aplikasi yang belum menerapkan responsive design adalah Mobile BCA yang jika dibuka di web masih mengalami issue sizing/paddingg/margin sehingga sulit digunakan.
+
+
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+Margin adalah jarak antara elemen (elemen bisa memiliki content/elemen lainnya seperti teks), border merupakan outline/batas luar dari content, dan padding merupakan jarak antara content dengan border/elemen yang berperan sebagai container/batas luar content.
+Berikut contoh implementasinya
+#css_spacing {
+    margin: 16px; 
+    border: 2px solid black; 
+    padding: 15px; 
+}
+Berikut adalah ilustrasi perbedaan margin, border, padding dari https://www.w3schools.com/
+
+
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+Flex box adalah sifat elemen yang akan membuat layout responsif dimana setiap item didalam container terebut akan secara dinamis disusun baik itu horizontal maupun vertical, akan tetapi hal ini tentunya memiliki kekurangan dalam bentuk kurangnya kontrol dari developer untuk menyusun lokasi setiap elemen. 
+Manfaat dan Kegunaan :
+1. Membuat layout responsif yang bisa digunakan pada semua platform
+2. Menyusun elemen horizontal atau vertikal dengan mudah dan hemat dalam proses kode
+
+Grid Layout adalah salah satu sifat elemen untuk membuat layout dari elemen yang akan disusun ibarat tabel dua dimensi dengan mengatur elemen dalam kolom dan baris. Sistem ini memberikan kontrol penuh kepada developer untuk membuat layout spesifik, namun perlu menambahkan spesifikasi layout cukup banyak agar tetap bisa digunakan dengan pada platform lain seperti mobile tanpa mengurangi readibility web. 
+Manfaat dan Kegunaan :
+1. Mengatur layout yang lebih detail dengan lokasi spesifik pada screen
+2. Membuat layout kompleks dengan jumlah kolom dan baris yang banyak seperti membuat tabel
+
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+1. Melakukan import dari library css yang ingin digunakan seperti Bootstrap atau Tailwind dan library lainnya seperti font dengan menggunakan embed code
+```
+<head>
+...
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
+</head>
+```
+Misalkan seperti berikut :
+2. Membuat folder pada root untuk menyimpan css yaitu folder static dan mengisi dengan folder css di dalam folder static tersebut
+3. Membuat berkas css pada folder css misalkan global.css, kemudian mengisi berkas dengan styling custom dan styling font
+4. Menambahkan formatting untuk setiap platform dengan menambahkan meta pada bagian head base.html
+```
+<head>
+    {% block meta %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock meta %}
+    ...
+</head>
+```
+5. Kemudian ubahlah tiap page sesuai kebutuhan css dan styling ingin digunakan pada semua html seperti main.html, login.html, register.html, dsb.
+6. Selanjutnya saya membuat komponen elemen yang diinginkan seperti navbar, card, atau banner dengan membuat html tiap komponen seperti card_product.html 
+Misalkan card_product.html seperti berikut :
+```
+<div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-lg overflow-hidden mx-auto font-[sans-serif] mt-4">
+  <div class="min-h-[256px] flex items-center justify-center">
+    {% if product_entry.image_url %}
+      <img src="{{ product_entry.image_url }}" class="object-contain h-full w-auto" alt="{{ product_entry.name }}" />
+    {% else %}
+      <p class="mx-auto text-center text-gray-700">Picture Unavailable</p>
+    {% endif %}
+  </div>
+  <div class="p-6">
+    <h3 class="text-gray-800 text-xl font-bold">{{ product_entry.name }}</h3>
+    <div class="flex space-x-2 mt-2">
+      <span class="text-xs text-white bg-indigo-900 rounded-full px-3 py-1">{{ product_entry.tags }}</span>
+      <span class="text-xs text-white bg-indigo-900 rounded-full px-3 py-1">{{ product_entry.ratings }} Stars</span>
+    </div>
+    <p class="mt-4 text-sm text-gray-500 leading-relaxed">{{ product_entry.description }}</p>
+    <p class="mt-12 text-center text-lg text-white leading-relaxed bg-indigo-600 rounded-full silkscreen-regular">Rp.{{ product_entry.price }}</p>
+    <p class="mt-4 text-sm text-gray-500 leading-relaxed">Added on {{ product_entry.time }}</p>
+    <!-- Buttons for Edit and Delete -->
+    <div class="flex space-x-2 justify-center mt-4">
+      <a href="{% url 'main:edit_product' product_entry.pk %}" class=" inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white rounded-full px-4 py-2 transition duration-300 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+        </svg>
+        Edit
+      </a>
+      <a href="{% url 'main:delete_product' product_entry.pk %}" class=" inline-flex items-center bg-red-500 hover:bg-red-600 text-white rounded-full p-4 transition duration-300 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+```
+7. Impor berkas html komponen pada page seperti main.html, login.html, register.html, dsb.
+Misalkan mengimpor pada main.html untuk card_info, card_product.html dan navbar seperti berikut
+```
+...
+{% include 'navbar.html' %}
+
+...
+{% include "card_info.html" with name=name npm=npm class=class %}
+
+...
+{% for product_entry in product_entries %}
+  {% include 'card_product.html' with product_entry=product_entry %}
+{% endfor %}
+
+...
+```
+8. Kita bisa menambahkan static files seperti images dengan menambahkan beberapa hal pada settings.py agar static files tetap disimpan oleh server 
+```
+# Static files (CSS, JavaScript, Images)
+# Dokumentasi: https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
+```
+dan menjalakan perintah collectstatic
+```
+
+```
+Kita bisa menggunakan link src untuk mendapat static file tersebut
+```
+<img src="{% static 'image/[NAMA FILE IMAGE].png' %}"
+```
+Dalam web ini saya belum menggunakan static image karena bisa menggunakan image link saja.
+9. Lakukan push untuk semua perubahan yang dilakukan
 
 ################
 
