@@ -870,9 +870,12 @@ Berikut contoh implementasinya
     padding: 15px; 
 }
 Berikut adalah ilustrasi perbedaan margin, border, padding dari https://www.w3schools.com/
+![Screenshot 2024-10-02 103933](https://github.com/user-attachments/assets/285ad530-ff27-4728-a581-90756d74f2d9)
+![Screenshot 2024-10-02 103940](https://github.com/user-attachments/assets/e31e0ab3-4233-4d3c-b751-013e779f8546)
+![Screenshot 2024-10-02 103952](https://github.com/user-attachments/assets/75c92865-6daa-4293-b15b-bb0c50a52207)
 
 
-4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+5. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
 Flex box adalah sifat elemen yang akan membuat layout responsif dimana setiap item didalam container terebut akan secara dinamis disusun baik itu horizontal maupun vertical, akan tetapi hal ini tentunya memiliki kekurangan dalam bentuk kurangnya kontrol dari developer untuk menyusun lokasi setiap elemen. 
 Manfaat dan Kegunaan :
 1. Membuat layout responsif yang bisa digunakan pada semua platform
