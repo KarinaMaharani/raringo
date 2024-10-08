@@ -984,6 +984,43 @@ Dalam web ini saya belum menggunakan static image karena bisa menggunakan image 
 
 ################
 
+TUGAS 5 -  Karina Maharani 2306165736
+
+Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+
+Jawab : 
+
+Java script akan bekerja untuk membuat tampilan html dan hiasan css menjadi fungsional dan interaktif dengan menambahkan behaivour. Behaivour seperti membuat button yang dapat menampilan tag < p> merupakan salah satu penggunaan java script.
+Java script membantu web agar lebih interaktif dan menghubungkan sisi front end dan back end web. JavaScript, terutama dengan teknologi seperti Node.js, juga bisa digunakan di server-side (back-end), sehingga JavaScript dapat bekerja baik di sisi front-end maupun back-end, misalkkan API atau AJAX, JavaScript memungkinkan pertukaran data client dan server tanpa perlu memuat ulang halaman secara asynchronus. Java script memiliki library yang luas untuk kebutuhan web untuk kebutuhan web lain. Framework dan library JavaScript seperti React dan Angular yang memudahkan pembuatan UI/UX yang dinamis dan kompleks yang membantu mempercepat pengembangan aplikasi web.
+
+Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+
+Jawab : 
+
+Await memastikan request dari fetch() diterima sepenuhnya dan diproses setelah httprequest sepenuhnya diselesaikan. Jika kita tida mengunakan await maka kode berisiko menyebabkan error karena data yang difetch dambil secara lansung tanpa mengecek apabila request sepenuhnya dipenuhi. Oleh karena itu perlu penanganan tambahan untuk memastikakn fetch tanpa await tidak menghasilkan error. Hal ini sangat penting terutama untuk proses asynchronus pada web karena await memastikan bahwa fungsi asynchronous ditahan sementara sampai dengan request sebelumnya selesai.
+
+
+Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+
+Jawab : 
+
+Kita menambahkann csrf_exempt untuk memastikan bahwa ketika melakukan POST melalui AJAX, input user dapat diterima, dalam csrf biasa django akan membaca token csrf pada request untuk memastikan bahwa token yang diterima benar valid dari requester yaitu penguna website bukan pihak eksternal. Dalam AJAX csrf tidak digunakan karena AJAX tidak menginclude token tersebut, oleh karena itu kita lakukan pennegcualian untuk AJAX dengan meng-exempt token tersebut. Jika kkita tidak melakukan excemption makka Django akan otomatis memblokir request.
+
+
+Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+Jawab : 
+
+Karena front end diakses langsung oleh user maka akan lebih rawan untuk dilakukan serangan oleh peretas, sehingga pembersihan data pentin dilakukan pada backend agar program tetap berjalan saat front end peretas berhasil di modifikasi. Back end juga tidak serentan front end karena lebih platform agnostic, beberapa browser seringkali memiliki arsitektur yang berbeda dan celah mungkin saja muncul di sisi front end. Pembersihan Back end jua mengavoid dillakukannya injksi seperti Cross-Site Scripting dengan memastikan data yang akan masuk ke backend berhasil ditangkap terlebih dahulu. Selain itu Back end juga cenderung lebih lengkap dalam fitur keamanannya karena memiliki validasi yang lebih kuat dibandingkan front end seperti tipe data yang dapat dipertimbangkan
+
+
+
+Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+Jawab : 
+
+################
+
 
 Copyright 2024 Karina Maharani
 

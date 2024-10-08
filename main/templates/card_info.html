@@ -4,9 +4,12 @@
             <h1 class="text-3xl font-bold">Welcome, {{name}}</h1>
             <p class="mt-4 text-sm leading-relaxed silkscreen-regular">with NPM {{npm}} from {{class}}</p>
             <div class="flex mt-4">
-                <a href="{% url 'main:create_product_entry' %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                <a href="{% url 'main:create_product_entry' %}" class="btn bg-indigo-400 hover:bg-indigo-600 text-white font-bold py-2 px-4 mr-2 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
                   Add New Product
                 </a>
+                <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-400 hover:bg-indigo-600 text-white font-bold py-2 px-4 mr-2 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+                  Add New Product Entry by AJAX
+                </button>
             </div>
         </div>
     </div>
