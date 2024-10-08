@@ -1022,6 +1022,374 @@ Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-b
 
 Jawab : 
 
+- Menambah verifikasi user login jika user terdaftar dengan penambahan di kode di views.py pada fungsi login
+```
+if form.is_valid():
+    user = form.get_user()
+    login(request, user)
+    response = HttpResponseRedirect(reverse("main:show_main"))
+    response.set_cookie('last_login', str(datetime.datetime.now()))
+    return response
+else:
+    messages.error(request, "Invalid username or password. Please try again.")
+```
+
+- Menambahkan fungsi AJAX untuk penambahan produk
+
+dengan menambahkan csfr exempt dan juga requirement POST 
+```
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+```
+lanjut denggan pembuatan fungsi penambahan produk ajax di views.py sebagai fungsi baru dan routing
+```
+# dalam file views.py
+@csrf_exempt
+@require_POST
+def create_product_entry_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    time = strip_tags(request.POST.get("time"))
+    tags = strip_tags(request.POST.get("tags"))
+    ratings = strip_tags(request.POST.get("ratings"))
+    image_url = strip_tags(request.POST.get("image_url"))
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description,
+        time=time,
+        tags=tags,
+        ratings=ratings,
+        image_url=image_url,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+```
+```
+# dalam file urls.py
+from main.views import ..., create_product_entry_ajax
+...
+urlpatterns = [
+    ...
+    path('create-product-entry-ajax', create_product_entry_ajax, name='create_product_entry_ajax'),
+]
+...
+```
+
+- Hapus instance dari models show_main di fungsi show_main dan tambahkan baris ke show_json dan show_xml
+```
+... # fungsi show_main
+product_entries = Product.objects.filter(user=request.user) # hapus baris
+...
+'product_entries': product_entries, # hapus baris
+...
+```
+```
+... # fungsi show_json dan show_xml
+data = Product.objects.filter(user=request.user)
+```
+
+- Hapus sistem card printin di web dan buat div dengan id sebagai container tampilan data saat sudah membuat instannce di database di main.html
+```
+# hapus
+...
+    {% if not product_entries %}
+        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+            <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+            <p class="text-center text-gray-600 mt-4">Belum ada data produk.</p>
+        </div>
+    {% else %}
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+            {% for product_entry in product_entries %}
+                {% include 'card_product.html' with product_entry=product_entry %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+# ganti dengan 
+<div id="product_entry_cards"></div>
+...
+```
+
+- Penambahan fitur DOM dan strip tags pada berkas dan import
+```
+# dalam forms.py
+from django.forms import ModelForm
+from main.models import Product
+from django.utils.html import strip_tags
+
+class ProductEntryForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ["name", "price", "description", "tags", "ratings", "image_url"]
+
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return strip_tags(name)
+
+    def clean_price(self):
+        price = self.cleaned_data["price"]
+        return strip_tags(price)
+    
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        return strip_tags(description)
+
+    def clean_tags(self):
+        tags = self.cleaned_data["tags"]
+        return strip_tags(tags)
+    
+    def clean_ratings(self):
+        ratings = self.cleaned_data["ratings"]
+        return strip_tags(ratings)
+    
+    def clean_image_url(self):
+        image_url = self.cleaned_data["image_url"]
+        return strip_tags(image_url)
+```
+```
+# dalam views.py
+...
+
+from django.utils.html import strip_tags
+
+...
+
+@csrf_exempt
+@require_POST
+def create_product_entry_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    time = strip_tags(request.POST.get("time"))
+    tags = strip_tags(request.POST.get("tags"))
+    ratings = strip_tags(request.POST.get("ratings"))
+    image_url = strip_tags(request.POST.get("image_url"))
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description,
+        time=time,
+        tags=tags,
+        ratings=ratings,
+        image_url=image_url,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+...
+```
+```
+# dalam main.py
+...
+{% block meta %}
+<title>Raringo</title>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+{% endblock meta %}
+{% block content %}
+...
+```
+
+- Penambahan modal pada mains.html untuk penerimaan forum tanpa membuka web page baru dalam main.html
+```
+<div class="overflow-x-auto">
+      <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <div id="product_entry_cards">
+        </div>
+        <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+          <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+              <h3 class="text-xl font-semibold text-gray-900">
+                Add New Product Entry
+              </h3>
+              <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+            </div>
+            <!-- START HERE FOR MODAL--> 
+            <div class="px-6 py-4 space-y-6 form-style">
+              <form id="productEntryForm">
+                <div class="mb-4">
+                  <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                  <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                </div>
+                <div class="mb-4">
+                  <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                  <input type="number" id="price" name="price" min="1" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                </div>
+                <div class="mb-4">
+                  <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                  <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Describe the product" required></textarea>
+                </div>
+                <div class="mb-4">
+                  <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                  <input type="text" id="tags" name="tags" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                </div>
+                <div class="mb-4">
+                  <label for="ratings" class="block text-sm font-medium text-gray-700">Ratings</label>
+                  <input type="number" id="ratings" name="ratings" min="0" max="5" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                </div>
+                <div class="mb-4">
+                  <label for="image_url" class="block text-sm font-medium text-gray-700">Image url</label>
+                  <input type="text" id="image_url" name="image_url" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" required>
+                </div>
+              </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+              <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+              <button type="submit" id="submitProductEntry" form="productEntryForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center mt-16">      
+      <h5>Sesi terakhir login: {{ last_login }}</h5>
+      <br />
+    </div>
+```
+
+
+- Tambahkan sistem submit form, XSS avoidance, data validation, modal dan reefresh data dari database pada di main.html dengan script java script serta memafaat ui/ux dalam tugas 5
+```
+
+<script>
+    function addProductEntry() {
+    fetch("{% url 'main:create_product_entry_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productEntryForm')),
+    })
+    .then(response => refreshProductEntries())
+
+    document.getElementById("productEntryForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+
+  async function getProductEntries(){
+      return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+  }
+
+  async function refreshProductEntries() {
+    document.getElementById("product_entry_cards").innerHTML = "";
+    document.getElementById("product_entry_cards").className = "";
+    const productEntries = await getProductEntries();
+    let htmlString = "";
+    let classNameString = "";
+
+    if (productEntries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="https://www.svgrepo.com/show/525569/upload-minimalistic.svg" alt="No Product Added" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Please, add at least one product.</p>
+            </div>
+        `;
+    }
+    else {
+        classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+        productEntries.forEach((item) => {
+            const name = DOMPurify.sanitize(item.fields.name);
+            const price = DOMPurify.sanitize(item.fields.price);
+            const description = DOMPurify.sanitize(item.fields.description);
+            const tags = DOMPurify.sanitize(item.fields.tags);
+            const ratings = DOMPurify.sanitize(item.fields.ratings);
+            const time = DOMPurify.sanitize(item.fields.time);
+            const image_url = DOMPurify.sanitize(item.fields.image_url);
+            htmlString += `
+            <div class="relative break-inside-avoid">
+              <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-sm rounded-lg overflow-hidden mx-auto font-[sans-serif] mt-4">
+                <div class="min-h-[256px] flex items-center justify-center">
+                    <img src="${image_url}" class="object-contain h-full w-auto" alt="${name}" />
+                </div>
+                <div class="p-6">
+                  <h3 class="text-gray-800 text-xl font-bold">${name}</h3>
+                  <div class="flex space-x-2 mt-2">
+                    <span class="text-xs text-white bg-indigo-900 rounded-full px-3 py-1">${tags}</span>
+                    <span class="text-xs text-white bg-indigo-900 rounded-full px-3 py-1">${ratings} Stars</span>
+                  </div>
+                  <p class="mt-4 text-sm text-gray-500 leading-relaxed">${description}</p>
+                  <p class="mt-12 text-center text-lg text-white leading-relaxed bg-indigo-600 rounded-full silkscreen-regular">Rp.${price}</p>
+                  <p class="mt-4 text-sm text-gray-500 leading-relaxed">Added on ${time}</p>
+                  <!-- Buttons for Edit and Delete -->
+                  <div class="flex space-x-2 justify-center mt-4">
+                    <a href="/edit-product/${item.pk}" class=" inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white rounded-full px-4 py-2 transition duration-300 shadow-md">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                      Edit
+                    </a>
+                    <a href="/delete/${item.pk}" class=" inline-flex items-center bg-red-500 hover:bg-red-600 text-white rounded-full p-4 transition duration-300 shadow-md">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                      </svg>
+                      Delete
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `;
+        });
+    }
+    document.getElementById("product_entry_cards").className = classNameString;
+    document.getElementById("product_entry_cards").innerHTML = htmlString;
+}
+refreshProductEntries();
+
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    function showModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modal.classList.remove('hidden'); 
+        setTimeout(() => {
+          modalContent.classList.remove('opacity-0', 'scale-95');
+          modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50); 
+    }
+
+    function hideModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 150); 
+    }
+
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+
+    document.getElementById("productEntryForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      addProductEntry();
+    })
+  
+</script>
+```
+
+
+
+
 ################
 
 
