@@ -166,7 +166,6 @@ def create_product_flutter(request):
             tags=data["tags"],
             ratings=float(data["ratings"]),
             image_url=data["image_url"],
-            user=data["user"],
         )
 
         new_product.save()
