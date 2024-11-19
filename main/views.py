@@ -1,4 +1,5 @@
 import datetime
+import json
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
@@ -7,6 +8,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from django.utils.html import strip_tags
 
@@ -148,3 +151,27 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_product = Product.objects.create(
+            user=request.user,
+            name=data["name"],
+            price=data["price"],
+            description=data["description"],
+            time=data["time"],
+            tags=data["tags"],
+            ratings=float(data["ratings"]),
+            image_url=data["image_url"],
+            user=data["user"],
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
